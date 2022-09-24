@@ -1,0 +1,8 @@
+/src/test/
+/libs/
+*.iml
+.idea
+/.gradle/
+/build/
+.classpath
+.project
