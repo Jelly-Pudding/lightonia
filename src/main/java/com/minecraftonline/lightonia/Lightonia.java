@@ -14,11 +14,11 @@ import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.text.Text;
 
 @Plugin(id = "lightonia",
-        name = "Lightonia",
+		name = "Lightonia",
         description = "Allow players to access backups in game",
         authors = {
-                "AlphaAlex115"
-        }
+        		"AlphaAlex115"
+	}
 )
 public class Lightonia {
 	
@@ -39,26 +39,26 @@ public class Lightonia {
 	    return logger;
 	}
 	
-    @Listener
-    public void onServerStart(GameStartedServerEvent event) {
-    	ConfigFile.getPaths();
-        logger.info("Lightonia has been loaded.");
-    }
+	@Listener
+	public void onServerStart(GameStartedServerEvent event) {
+		ConfigFile.getPaths();
+		logger.info("Lightonia has been loaded.");
+	}
 
-    @Listener
-    public void init(GameInitializationEvent event) {
-        registerCommands();
-    }
+	@Listener
+	public void init(GameInitializationEvent event) {
+		registerCommands();
+	}
 
-    private void registerCommands() {
-        CommandSpec createSpec = CommandSpec.builder()
-                .description(Text.of("Lightonia commands"))
-                .permission("lightonia.command")
-                .arguments(GenericArguments.seq(GenericArguments.string(Text.of("argument")), 
-                		   GenericArguments.optionalWeak(GenericArguments.string(Text.of("option1"))),
-                		   GenericArguments.optionalWeak(GenericArguments.string(Text.of("option2")))))
-                .executor(new CommandHub())             					
-                .build();
-        Sponge.getCommandManager().register(this, createSpec, "lightonia");    
-    }
+	private void registerCommands() {
+		CommandSpec createSpec = CommandSpec.builder()
+				.description(Text.of("Lightonia commands"))
+				.permission("lightonia.command")
+				.arguments(GenericArguments.seq(GenericArguments.string(Text.of("argument")), 
+							GenericArguments.optionalWeak(GenericArguments.string(Text.of("option1"))),
+							GenericArguments.optionalWeak(GenericArguments.string(Text.of("option2")))))
+				.executor(new CommandHub())             					
+				.build();
+		Sponge.getCommandManager().register(this, createSpec, "lightonia");    
+	}
 }

@@ -38,7 +38,7 @@ public class ConfigFile {
 		}
 	}
 
-	static void resetConfigFile(String filePath) {
+	private static void resetConfigFile(String filePath) {
 		// First the file gets deleted.
 		try {
 			Files.delete(Paths.get(filePath));

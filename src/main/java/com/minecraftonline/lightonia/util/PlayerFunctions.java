@@ -25,10 +25,10 @@ import com.minecraftonline.lightonia.Lightonia;
 public class PlayerFunctions {
 	
 	public static String [] dummyUUIDArray = new String [] {ConfigFile.dummyUUID0,
-													 ConfigFile.dummyUUID1,
-													 ConfigFile.dummyUUID2,
-													 ConfigFile.dummyUUID3,
-													 ConfigFile.dummyUUID4};
+										ConfigFile.dummyUUID1,
+										ConfigFile.dummyUUID2,
+										ConfigFile.dummyUUID3,
+										ConfigFile.dummyUUID4};
 	
 	public static String getUUID(Player player, String name) throws IOException {
 		URL url = new URL("https://api.mojang.com/users/profiles/minecraft/" + name);
