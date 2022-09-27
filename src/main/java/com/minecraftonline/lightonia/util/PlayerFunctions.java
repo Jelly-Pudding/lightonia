@@ -57,24 +57,24 @@ public class PlayerFunctions {
 	
 	public static Optional<User> getUser(String stringUUID) {
 		UUID uuid = UUID.fromString(stringUUID);
-	    Optional<UserStorageService> userStorage = Sponge.getServiceManager().provide(UserStorageService.class);
-	    return userStorage.get().get(uuid);
-		}
+		Optional<UserStorageService> userStorage = Sponge.getServiceManager().provide(UserStorageService.class);
+		return userStorage.get().get(uuid);
+	}
 	
 	public static void seeInventory(Player player, User user, String targetName) {		
 
-        Inventory build = Inventory.builder()
-                .of(InventoryArchetypes.DOUBLE_CHEST)
-                .build(Lightonia.getPlugin());
+		Inventory build = Inventory.builder()
+				.of(InventoryArchetypes.DOUBLE_CHEST)
+				.build(Lightonia.getPlugin());
         
-        for(Inventory slot : user.getInventory().slots()){
-	    	if (slot.peek().isPresent()) {
-	    		build.offer(slot.peek().get());
-	    	}
-        }
-
-	    player.openInventory(build.parent(), Text.of(TextColors.DARK_RED, targetName + "'s " + "inventory"));      
+		for(Inventory slot : user.getInventory().slots()){
+			if (slot.peek().isPresent()) {
+				build.offer(slot.peek().get());
+			}
 		}
+
+		player.openInventory(build.parent(), Text.of(TextColors.DARK_RED, targetName + "'s " + "inventory"));      
+	}
 	
 	public static void shiftDummyArray() {
 		String temp = PlayerFunctions.dummyUUIDArray[4];

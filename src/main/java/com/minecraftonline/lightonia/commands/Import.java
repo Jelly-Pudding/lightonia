@@ -16,8 +16,14 @@ import com.minecraftonline.lightonia.util.WorldFunctions;
 
 public class Import {
 	static void importRegions(Player player) {
+		
+		if (!FileFunctions.checkWorldPath(player)) {
+			player.sendMessage(Text.of(TextColors.DARK_RED, "Please change the worldPath in lightonia.conf to the path that has 'regions' and 'playerdata' in it."));
+			return;
+		};
+		
 		if (FileFunctions.selectedWorldBackup.isEmpty()) {
-			player.sendMessage(Text.of(TextColors.DARK_RED, "Please select a world backup with /lightonia select world <backup>."));
+			player.sendMessage(Text.of(TextColors.DARK_RED, "Please select a world backup with /Lightonia select world <backup>."));
 			return;
 		}
 		

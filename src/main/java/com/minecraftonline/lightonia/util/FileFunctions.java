@@ -33,6 +33,22 @@ public class FileFunctions {
 	public static boolean tarFilePlayer = false;
 	public static boolean tarCompressedFilePlayer = false;
 
+	public static boolean checkWorldPath(Player player) {
+		if (new File(ConfigFile.worldPath).exists()) {
+			File[] listOfFiles = new File(ConfigFile.worldPath).listFiles();
+			for (File file : listOfFiles) {
+				if (file.isDirectory() && (file.getName().equals("region") || file.getName().equals("DIM1") || file.getName().equals("DIM-1"))) {
+					// This worldPath is most likely correct.
+					return true;
+				}
+			}
+			player.sendMessage(Text.of(TextColors.DARK_RED, "The worldPath provided in lightonia.conf does not appear to be correct!"));
+		} else {
+			player.sendMessage(Text.of(TextColors.DARK_RED, "The worldPath provided in lightonia.conf does not exist!"));
+		}
+		return false;
+	}
+	
 	static boolean isLightoniaEmpty() {
 		// Creates parent directories if they do not already exist.
 		File lightoniaRegionFolder = new File(ConfigFile.worldPath + "/Lightonia/region");
