@@ -52,8 +52,7 @@ public class WorldFunctions {
 			try {
 				Sponge.getServer().createWorldProperties(worldName, worldArchetype);
 			} catch (IOException e1) {
-				player.sendMessage(
-						Text.of(TextColors.DARK_RED, "An error occurred while creating Lightonia..."));
+				player.sendMessage(Text.of(TextColors.DARK_RED, "An error occurred while creating Lightonia..."));
 				player.sendMessage(Text.of(TextColors.DARK_RED, e1));
 			}
 			Sponge.getServer().loadWorld("Lightonia");
