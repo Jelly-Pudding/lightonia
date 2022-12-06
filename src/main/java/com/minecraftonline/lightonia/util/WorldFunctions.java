@@ -8,6 +8,7 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
+import org.spongepowered.api.world.Chunk;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.WorldArchetype;
 import org.spongepowered.api.world.WorldArchetypes;
@@ -68,18 +69,45 @@ public class WorldFunctions {
 		return;
 	}
 	
+	public static void unloadLightoniaChunks(Player player) {
+		if (doesLightoniaExist()) {
+			World theWorld = Sponge.getServer().getWorld("Lightonia").get();
+			Collection<Player> lightoniaPlayers = theWorld.getPlayers();
+			if (lightoniaPlayers.isEmpty()) {
+				Iterable<Chunk> allChunks = theWorld.getLoadedChunks();
+				player.sendMessage(Text.of(TextColors.DARK_GREEN, "Unloading chunks..."));
+				for (Chunk chunk: allChunks) {
+					if (!chunk.unloadChunk()) {
+						player.sendMessage(Text.of(TextColors.DARK_RED, "Failed to unload a chunk at " + chunk.getPosition()));
+					} else {
+						player.sendMessage(Text.of(TextColors.DARK_GREEN, "Successfully unloaded a chunk at " + chunk.getPosition()));
+					}
+				}
+				player.sendMessage(Text.of(TextColors.DARK_GREEN, "Done."));
+			} else {
+				player.sendMessage(Text.of(TextColors.DARK_RED, "Someone is currently in Lightonia. Loaded chunks won't be unloaded."));
+			}
+		} else {
+			player.sendMessage(Text.of(TextColors.DARK_RED, "No chunks to unload since Lightonia does not exist."));
+		}
+		//chunk allChunks = getLoadedChunks()
+	}
+	
 	public static void unloadThenDeleteLightonia(Player player) {
 		if (doesLightoniaExist()) {
 			if (!isLightoniaLoaded()) {
-				player.sendMessage(Text.of(TextColors.DARK_GREEN, "Lightonia was unloaded. Loading for deletion..."));
+				player.sendMessage(Text.of(TextColors.DARK_GREEN, "Loading Lightonia for deletion..."));
 				Sponge.getServer().loadWorld("Lightonia");
-			}
-			World theWorld = Sponge.getServer().getWorld("Lightonia").get();
-			if (Sponge.getServer().unloadWorld(theWorld)) {
-				Sponge.getServer().deleteWorld(theWorld.getProperties());
-				player.sendMessage(Text.of(TextColors.DARK_GREEN, "Successfully deleted Lightonia."));			
+				World theWorld = Sponge.getServer().getWorld("Lightonia").get();
+				if (Sponge.getServer().unloadWorld(theWorld)) {
+					Sponge.getServer().deleteWorld(theWorld.getProperties());
+					player.sendMessage(Text.of(TextColors.DARK_GREEN, "Successfully deleted Lightonia."));
+				} else {
+					player.sendMessage(Text.of(TextColors.DARK_RED, "Failed to delete Lightonia."));
+				}
 			} else {
-				player.sendMessage(Text.of(TextColors.DARK_RED, "Lightonia cannot be deleted because someone appears to be inside it."));
+				player.sendMessage(Text.of(TextColors.DARK_RED, "Lightonia is loaded. Avoiding deletion to keep craftbook happy. "
+										+ "Run this command when Lightonia is not loaded like after a server restart."));
 			}
 		} else {
 			player.sendMessage(Text.of(TextColors.DARK_RED, "Lightonia does not exist."));

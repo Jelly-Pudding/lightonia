@@ -25,7 +25,9 @@ public class Help {
 				.concat(Text.of(TextColors.WHITE, "Teleports you into Lightonia.")
 				.concat(Text.of(TextColors.LIGHT_PURPLE, "\n/Lightonia tpb: ")
 				.concat(Text.of(TextColors.WHITE, "Teleports you back to your original position.")
+				.concat(Text.of(TextColors.LIGHT_PURPLE, "\n/Lightonia unload: ")
+				.concat(Text.of(TextColors.WHITE, "Unloads all loaded chunks in Lightonia.")
 				.concat(Text.of(TextColors.LIGHT_PURPLE, "\n/Lightonia destroy: ")
-				.concat(Text.of(TextColors.WHITE, "Destroys the Lightonia world.")))))))))))))))))))));
+				.concat(Text.of(TextColors.WHITE, "The Lightonia world is unloaded and its files are deleted asynchronously from the disk.")))))))))))))))))))))));
 	}
 }
