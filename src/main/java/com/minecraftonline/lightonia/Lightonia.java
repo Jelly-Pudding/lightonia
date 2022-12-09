@@ -14,10 +14,10 @@ import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.text.Text;
 
 @Plugin(id = "lightonia",
-		name = "Lightonia",
-		description = "Allow players to access backups in game",
-		authors = {"AlphaAlex115"}
-		)
+	name = "Lightonia",
+	description = "Allow players to access backups in game",
+	authors = {"AlphaAlex115"}
+	)
 public class Lightonia {
 	
 	private static Lightonia plugin;
