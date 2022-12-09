@@ -142,6 +142,10 @@ public class FileFunctions {
 			File folder = new File(directory);
 			File[] listOfFiles = folder.listFiles();
 			for (File file : listOfFiles) {
+				// For playerdata, ignore the DIM1 and DIM-1 folders if they exist.
+				if (!world && file.isDirectory() && (file.getName().equals("DIM1") || file.getName().equals("DIM-1"))) {
+					continue;
+				}
 				if (file.isDirectory()) {
 					if (Arrays.asList(acceptedFolders).contains(file.getName())) {
 						if (world) {
@@ -177,7 +181,15 @@ public class FileFunctions {
 								if (world) {
 									FileFunctions.tarDirectoryWorld = entryMinusSlash.substring(0, entryMinusSlash.length() - folderName.length());
 								} else {
-									FileFunctions.tarDirectoryPlayer = entryMinusSlash.substring(0, entryMinusSlash.length() - folderName.length());
+									String parentPath = entryMinusSlash.substring(0, entryMinusSlash.length() - folderName.length());
+									if (!parentPath.isEmpty()) {
+										String parentMinusSlash = parentPath.substring(0, parentPath.length() - 1);
+										String parentFolder = parentMinusSlash.substring(parentMinusSlash.lastIndexOf('/') + 1);
+										if (parentFolder.equals("DIM1") || parentFolder.equals("DIM-1")) {
+											continue;
+										}
+									}
+									FileFunctions.tarDirectoryPlayer = parentPath;
 								}
 								done = true;
 								break;
