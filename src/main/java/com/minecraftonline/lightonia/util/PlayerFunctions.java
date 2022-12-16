@@ -44,11 +44,18 @@ public class PlayerFunctions {
 		while ((len = is.read(bytes)) != -1) {
 			writer.write(bytes, 0, len);
 		}
-		String response = new String(writer.toByteArray());
-		String stringUUID = response.substring(response.indexOf("\"", response.indexOf("\"", response.indexOf("\"") + 1) + 1) + 1);
-		stringUUID = stringUUID.substring(0, stringUUID.indexOf("\""));
 		is.close();
 		con.disconnect();
+		String response = new String(writer.toByteArray());
+		response = response.substring(1, response.length() - 1);
+		String[] keyValuePairs = response.split(",");
+		String stringUUID = "";
+		for(String pair: keyValuePairs) {
+			String[] entry = pair.split(":");
+			if (entry[0].trim().equals("\"id\"")) {
+				stringUUID = entry[1].trim().substring(1, entry[1].length() - 1);
+			}
+		}
 		stringUUID = stringUUID.replaceAll("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})", "$1-$2-$3-$4-$5");
 		return stringUUID;
 	}
