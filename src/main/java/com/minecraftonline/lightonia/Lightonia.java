@@ -40,7 +40,7 @@ public class Lightonia {
 	@Listener
 	public void onServerStart(GameStartedServerEvent event) {
 		ConfigFile.getPaths();
-		logger.info("Lightonia has been loaded.");
+		logger.info("The Lightonia configuration file has been loaded.");
 	}
 
 	@Listener

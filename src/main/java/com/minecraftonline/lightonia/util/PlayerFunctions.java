@@ -1,11 +1,10 @@
 package com.minecraftonline.lightonia.util;
 
-import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,7 +17,6 @@ import org.spongepowered.api.service.user.UserStorageService;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
-import com.google.gson.Gson;
 import com.minecraftonline.lightonia.ConfigFile;
 import com.minecraftonline.lightonia.Lightonia;
 
@@ -39,20 +37,20 @@ public class PlayerFunctions {
 			player.sendMessage(Text.of(TextColors.DARK_RED, "Failed to find player's UUID."));
 			return "";
 		}
-		String stringUUID = "";
-		String inputLine = null;
-		Gson gson = new Gson();
-		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-		while ((inputLine = in.readLine()) != null) {
-			Map<?, ?> map = gson.fromJson(inputLine, Map.class);
-			if (map.containsKey("id")) {
-				stringUUID = map.get("id").toString();
-			}
-		}
-		in.close();
-		con.disconnect();
-		stringUUID = stringUUID.replaceAll("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})", "$1-$2-$3-$4-$5");
-		return stringUUID;
+        InputStream is = con.getInputStream();
+        ByteArrayOutputStream writer = new ByteArrayOutputStream();
+        int len;
+        byte[] bytes = new byte[200];
+        while ((len = is.read(bytes)) != -1) {
+            writer.write(bytes, 0, len);
+        }
+        String response = new String(writer.toByteArray());
+        String stringUUID = response.substring(response.indexOf("\"", response.indexOf("\"", response.indexOf("\"") + 1) + 1) + 1);
+        stringUUID = stringUUID.substring(0, stringUUID.indexOf("\""));
+        is.close();
+        con.disconnect();
+        stringUUID = stringUUID.replaceAll("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})", "$1-$2-$3-$4-$5");
+        return stringUUID;
 	}
 	
 	public static Optional<User> getUser(String stringUUID) {
