@@ -43,7 +43,7 @@ public class PlayerFunctions {
 		byte[] bytes = new byte[200];
 		while ((len = is.read(bytes)) != -1) {
 			writer.write(bytes, 0, len);
-			}
+		}
 		String response = new String(writer.toByteArray());
 		String stringUUID = response.substring(response.indexOf("\"", response.indexOf("\"", response.indexOf("\"") + 1) + 1) + 1);
 		stringUUID = stringUUID.substring(0, stringUUID.indexOf("\""));
