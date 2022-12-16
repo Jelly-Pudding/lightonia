@@ -53,8 +53,8 @@ public class Lightonia {
 				.description(Text.of("Lightonia commands"))
 				.permission("lightonia.command")
 				.arguments(GenericArguments.seq(GenericArguments.string(Text.of("argument")), 
-						GenericArguments.optionalWeak(GenericArguments.string(Text.of("option1"))),
-						GenericArguments.optionalWeak(GenericArguments.string(Text.of("option2")))))
+								GenericArguments.optionalWeak(GenericArguments.string(Text.of("option1"))),
+								GenericArguments.optionalWeak(GenericArguments.string(Text.of("option2")))))
 				.executor(new CommandHub())             					
 				.build();
 		Sponge.getCommandManager().register(this, createSpec, "lightonia");    
