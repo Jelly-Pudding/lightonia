@@ -71,26 +71,29 @@ public class WorldFunctions {
 	
 	public static void unloadLightoniaChunks(Player player) {
 		if (doesLightoniaExist()) {
-			World theWorld = Sponge.getServer().getWorld("Lightonia").get();
-			Collection<Player> lightoniaPlayers = theWorld.getPlayers();
-			if (lightoniaPlayers.isEmpty()) {
-				Iterable<Chunk> allChunks = theWorld.getLoadedChunks();
-				player.sendMessage(Text.of(TextColors.DARK_GREEN, "Unloading chunks..."));
-				for (Chunk chunk: allChunks) {
-					if (!chunk.unloadChunk()) {
-						player.sendMessage(Text.of(TextColors.DARK_RED, "Failed to unload a chunk at " + chunk.getPosition()));
-					} else {
-						player.sendMessage(Text.of(TextColors.DARK_GREEN, "Successfully unloaded a chunk at " + chunk.getPosition()));
+			Optional<World> theWorld = Sponge.getServer().getWorld("Lightonia");
+			if (theWorld.isPresent()) {
+				Collection<Player> lightoniaPlayers = theWorld.get().getPlayers();
+				if (lightoniaPlayers.isEmpty()) {
+					Iterable<Chunk> allChunks = theWorld.get().getLoadedChunks();
+					player.sendMessage(Text.of(TextColors.DARK_GREEN, "Unloading chunks..."));
+					for (Chunk chunk: allChunks) {
+						if (!chunk.unloadChunk()) {
+							player.sendMessage(Text.of(TextColors.DARK_RED, "Failed to unload a chunk at " + chunk.getPosition()));
+						} else {
+							player.sendMessage(Text.of(TextColors.DARK_GREEN, "Successfully unloaded a chunk at " + chunk.getPosition()));
+						}
 					}
+					player.sendMessage(Text.of(TextColors.DARK_GREEN, "Done."));
+				} else {
+					player.sendMessage(Text.of(TextColors.DARK_RED, "Someone is currently in Lightonia. Loaded chunks won't be unloaded."));
 				}
-				player.sendMessage(Text.of(TextColors.DARK_GREEN, "Done."));
 			} else {
-				player.sendMessage(Text.of(TextColors.DARK_RED, "Someone is currently in Lightonia. Loaded chunks won't be unloaded."));
+				player.sendMessage(Text.of(TextColors.DARK_RED, "Lightonia is not even loaded. There won't be any chunks to unload."));
 			}
 		} else {
 			player.sendMessage(Text.of(TextColors.DARK_RED, "No chunks to unload since Lightonia does not exist."));
 		}
-		//chunk allChunks = getLoadedChunks()
 	}
 	
 	public static void unloadThenDeleteLightonia(Player player) {

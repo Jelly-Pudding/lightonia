@@ -15,7 +15,7 @@ public class Teleport {
 	static HashMap<String, Object[]> positionBeforeTeleport = new HashMap<String, Object[]>();
 	static void lightoniaTeleport(Player player) {
 		if (player.getWorld().getName().equals("Lightonia")) {
-			player.sendMessage(Text.of(TextColors.DARK_GRAY, "You are already in Lightonia!"));
+			player.sendMessage(Text.of(TextColors.DARK_RED, "You are already in Lightonia!"));
 			return;
 		}
 		if (WorldFunctions.doesLightoniaExist()) {
@@ -26,7 +26,7 @@ public class Teleport {
 			player.transferToWorld("Lightonia", playerPosition);
 			return;
 		}
-		player.sendMessage(Text.of(TextColors.DARK_RED, "The world Lightonia does not exist! Check /Lightonia help."));
+		player.sendMessage(Text.of(TextColors.DARK_RED, "The world Lightonia does not exist! Try /Lightonia create and also check out /Lightonia help."));
 	}
 	
 	static void defaultWorldTeleport(Player player) {	
