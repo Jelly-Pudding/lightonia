@@ -37,20 +37,20 @@ public class PlayerFunctions {
 			player.sendMessage(Text.of(TextColors.DARK_RED, "Failed to find player's UUID."));
 			return "";
 		}
-        InputStream is = con.getInputStream();
-        ByteArrayOutputStream writer = new ByteArrayOutputStream();
-        int len;
-        byte[] bytes = new byte[200];
-        while ((len = is.read(bytes)) != -1) {
-            writer.write(bytes, 0, len);
-        }
-        String response = new String(writer.toByteArray());
-        String stringUUID = response.substring(response.indexOf("\"", response.indexOf("\"", response.indexOf("\"") + 1) + 1) + 1);
-        stringUUID = stringUUID.substring(0, stringUUID.indexOf("\""));
-        is.close();
-        con.disconnect();
-        stringUUID = stringUUID.replaceAll("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})", "$1-$2-$3-$4-$5");
-        return stringUUID;
+		InputStream is = con.getInputStream();
+		ByteArrayOutputStream writer = new ByteArrayOutputStream();
+		int len;
+		byte[] bytes = new byte[200];
+		while ((len = is.read(bytes)) != -1) {
+			writer.write(bytes, 0, len);
+			}
+		String response = new String(writer.toByteArray());
+		String stringUUID = response.substring(response.indexOf("\"", response.indexOf("\"", response.indexOf("\"") + 1) + 1) + 1);
+		stringUUID = stringUUID.substring(0, stringUUID.indexOf("\""));
+		is.close();
+		con.disconnect();
+		stringUUID = stringUUID.replaceAll("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})", "$1-$2-$3-$4-$5");
+		return stringUUID;
 	}
 	
 	public static Optional<User> getUser(String stringUUID) {
