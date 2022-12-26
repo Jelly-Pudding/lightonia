@@ -1,5 +1,6 @@
 package com.minecraftonline.lightonia.util;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -15,6 +16,7 @@ import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 import org.apache.commons.compress.utils.IOUtils;
+
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.service.pagination.PaginationList;
 import org.spongepowered.api.text.Text;
@@ -167,13 +169,14 @@ public class FileFunctions {
 			try {
 				TarArchiveInputStream tarInput = null;
 				if ((world && FileFunctions.tarFileWorld) || (!world && FileFunctions.tarFilePlayer)) {
-					tarInput = new TarArchiveInputStream(new FileInputStream(directory));
+					tarInput = new TarArchiveInputStream(new BufferedInputStream (new FileInputStream(directory)));
 				} else {
-					tarInput = new TarArchiveInputStream(new GzipCompressorInputStream(new FileInputStream(directory)));
+					tarInput = new TarArchiveInputStream(new GzipCompressorInputStream(new BufferedInputStream (new FileInputStream(directory))));
 				}
 				TarArchiveEntry entry;
 				while ((entry = tarInput.getNextTarEntry()) != null) {
 					if (entry.isDirectory()) {
+						// DIM1 is four characters, and playerdata 10 characters.
 						if ((world && entry.getName().length() >= 4) || (!world && entry.getName().length() >= 10)) {
 							String entryMinusSlash = entry.getName().substring(0, entry.getName().length() - 1);
 							String folderName = entryMinusSlash.substring(entryMinusSlash.lastIndexOf('/') + 1);
@@ -185,6 +188,7 @@ public class FileFunctions {
 									if (!parentPath.isEmpty()) {
 										String parentMinusSlash = parentPath.substring(0, parentPath.length() - 1);
 										String parentFolder = parentMinusSlash.substring(parentMinusSlash.lastIndexOf('/') + 1);
+										// For playerdata, we once again ignore DIM1 and DIM-1 folders.
 										if (parentFolder.equals("DIM1") || parentFolder.equals("DIM-1")) {
 											continue;
 										}
@@ -210,9 +214,9 @@ public class FileFunctions {
 		TarArchiveInputStream tarInput = null;
 		try {
 			if ((world && FileFunctions.tarFileWorld) || (!world && FileFunctions.tarFilePlayer)) {
-				tarInput = new TarArchiveInputStream(new FileInputStream(selectedDirectory));
+				tarInput = new TarArchiveInputStream(new BufferedInputStream (new FileInputStream(selectedDirectory)));
 			} else {
-				tarInput = new TarArchiveInputStream(new GzipCompressorInputStream(new FileInputStream(selectedDirectory)));
+				tarInput = new TarArchiveInputStream(new GzipCompressorInputStream(new BufferedInputStream (new FileInputStream(selectedDirectory))));
 			}
 			TarArchiveEntry entry = null;
 			while ((entry = tarInput.getNextTarEntry()) != null) {
