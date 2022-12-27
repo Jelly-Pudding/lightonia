@@ -1,5 +1,7 @@
 package com.minecraftonline.lightonia.commands;
 
+import java.util.Optional;
+
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
@@ -77,7 +79,7 @@ public class Import {
 		}
 		if (FileFunctions.tarFileWorld || FileFunctions.tarCompressedFileWorld) {
 			FileFunctions.transferFromTar(player, true, FileFunctions.selectedWorldBackup, FileFunctions.tarDirectoryWorld + folder + "region", regionName, 
-					                      ConfigFile.worldBackupPath, "world", "/Lightonia/region/" + regionName);
+					                      ConfigFile.worldBackupPath, "world", "/Lightonia/region/" + regionName, Optional.of(""), "");
 		} else {
 			FileFunctions.transferFiles(player, true, FileFunctions.selectedWorldBackup, "/" + folder + "region/" + regionName, "/Lightonia/region/" + regionName, "region");
 		}

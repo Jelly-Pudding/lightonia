@@ -11,18 +11,31 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.function.Consumer;
+
+import javax.swing.SwingUtilities;
 
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 import org.apache.commons.compress.utils.IOUtils;
-
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.scheduler.SpongeExecutorService;
+import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.service.pagination.PaginationList;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import com.minecraftonline.lightonia.ConfigFile;
+import com.minecraftonline.lightonia.Lightonia;
+import com.minecraftonline.lightonia.commands.Invsee;
 
 public class FileFunctions {
 
@@ -209,53 +222,61 @@ public class FileFunctions {
 		}
 	}
 	
-	public static boolean transferFromTar(Player player, boolean world, String selectedDirectory, String desiredDirectory, String desiredFile, String backupPath, String type, String destination) {
-		boolean done = false;
-		TarArchiveInputStream tarInput = null;
-		try {
-			if ((world && FileFunctions.tarFileWorld) || (!world && FileFunctions.tarFilePlayer)) {
-				tarInput = new TarArchiveInputStream(new BufferedInputStream (new FileInputStream(selectedDirectory)));
-			} else {
-				tarInput = new TarArchiveInputStream(new GzipCompressorInputStream(new BufferedInputStream (new FileInputStream(selectedDirectory))));
-			}
-			TarArchiveEntry entry = null;
-			while ((entry = tarInput.getNextTarEntry()) != null) {
-				if (entry.getName().equals(desiredDirectory + "/" + desiredFile)) {
-					// Ensures created directory will be unique.
-					long unixTimeNow = System.currentTimeMillis() / 1000L;
-					new File(backupPath, "/" + unixTimeNow + "lightonia_temp_" + type + "/" + desiredDirectory).mkdirs();
-					File outputFile = new File(backupPath, "/" + unixTimeNow + "lightonia_temp_" + type + "/" + desiredDirectory + "/" + desiredFile);
-					OutputStream outputFileStream = new FileOutputStream(outputFile);
-					IOUtils.copy(tarInput, outputFileStream);
-					outputFileStream.close();
-					if (world) {
-						// Ensures the directory exists.
-						new File(ConfigFile.worldPath + "/Lightonia/region").mkdirs();
+	public static void transferFromTar(Player player, boolean world, String selectedDirectory, String desiredDirectory, String desiredFile, String backupPath, String type, String destination, Optional<String> targetName, String dummyUUID) {
+		Task.builder().execute(() -> {
+			boolean done = false;
+			TarArchiveInputStream tarInput = null;
+			try {
+				if ((world && FileFunctions.tarFileWorld) || (!world && FileFunctions.tarFilePlayer)) {
+					tarInput = new TarArchiveInputStream(new BufferedInputStream (new FileInputStream(selectedDirectory)));
+				} else {
+					tarInput = new TarArchiveInputStream(new GzipCompressorInputStream(new BufferedInputStream (new FileInputStream(selectedDirectory))));
+				}
+				TarArchiveEntry entry = null;
+				while ((entry = tarInput.getNextTarEntry()) != null) {
+					if (entry.getName().equals(desiredDirectory + "/" + desiredFile)) {
+						// Ensures created directory will be unique.
+						long unixTimeNow = System.currentTimeMillis() / 1000L;
+						new File(backupPath, "/" + unixTimeNow + "lightonia_temp_" + type + "/" + desiredDirectory).mkdirs();
+						File outputFile = new File(backupPath, "/" + unixTimeNow + "lightonia_temp_" + type + "/" + desiredDirectory + "/" + desiredFile);
+						OutputStream outputFileStream = new FileOutputStream(outputFile);
+						IOUtils.copy(tarInput, outputFileStream);
+						outputFileStream.close();
+						if (world) {
+							// Ensures the directory exists.
+							new File(ConfigFile.worldPath + "/Lightonia/region").mkdirs();
+						}
+						File destinationFile = new File(ConfigFile.worldPath + destination);
+						Files.copy(outputFile.toPath(), destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+						File parentFolder = new File(backupPath, "/" + unixTimeNow + "lightonia_temp_" + type);
+						FileFunctions.deleteDirectory(parentFolder);
+						player.sendMessage(Text.of(TextColors.DARK_GREEN, "Done!"));
+						done = true;
+						break;
 					}
-					File destinationFile = new File(ConfigFile.worldPath + destination);
-					Files.copy(outputFile.toPath(), destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-					File parentFolder = new File(backupPath, "/" + unixTimeNow + "lightonia_temp_" + type);
-					FileFunctions.deleteDirectory(parentFolder);
-					player.sendMessage(Text.of(TextColors.DARK_GREEN, "Done!"));
-					done = true;
-					break;
+				}
+				
+			} catch (IOException e) {
+				player.sendMessage(Text.of(TextColors.DARK_RED, "Error while reading and copying from Tar file: \n" + e));
+			} finally {
+				try {
+					tarInput.close();
+				} catch (IOException e) {
+					player.sendMessage(Text.of(TextColors.DARK_RED, "Error while closing archive input stream: \n" + e));
 				}
 			}
-			
-		} catch (IOException e) {
-			player.sendMessage(Text.of(TextColors.DARK_RED, "Error while reading and copying from Tar file: \n" + e));
-		}
-		try {
-			tarInput.close();
-		} catch (IOException e) {
-			player.sendMessage(Text.of(TextColors.DARK_RED, "Error while closing archive input stream: \n" + e));
-		}
-		if (!done) {
-			player.sendMessage(Text.of(TextColors.DARK_RED, "Error: " + type + " file\n(" + desiredDirectory + "/" + desiredFile + ")\n does not exist in the Tar file:\n" + selectedDirectory));
-		}
-		return done;
+			if (!done) {
+				player.sendMessage(Text.of(TextColors.DARK_RED, "Error: " + type + " file\n(" + desiredDirectory + "/" + desiredFile + ")\n does not exist in the Tar file:\n" + selectedDirectory));
+			} else {
+				if (!world) {
+					Task.builder().execute(() -> {
+						Invsee.invseeAfterAsync(player, targetName, dummyUUID);
+					}).name("Lightonia - open up player inventory").submit(Lightonia.getPlugin());
+				}
+			}
+		}).async().name("Lightonia - transfer tar file").submit(Lightonia.getPlugin());
 	}
-	
+
 	public static boolean transferFiles(Player player, boolean world, String selectedBackup, String backupPath, String destinationPath, String type) {
 		if (world) {
 			// Creates parent directories if they do not already exist.
