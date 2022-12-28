@@ -66,8 +66,7 @@ public class PlayerFunctions {
 		return userStorage.get().get(uuid);
 	}
 	
-	public static void seeInventory(Player player, User user, String targetName) {		
-
+	public static void seeInventory(Player player, User user, String targetName) {
 		Inventory build = Inventory.builder()
 				.of(InventoryArchetypes.DOUBLE_CHEST)
 				.build(Lightonia.getPlugin());

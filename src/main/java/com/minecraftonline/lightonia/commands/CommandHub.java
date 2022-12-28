@@ -72,11 +72,6 @@ public class CommandHub implements CommandExecutor {
 			return CommandResult.success();
 		}
 		
-		if (argument.equals("unload")) {
-			WorldFunctions.unloadLightoniaChunks(player);
-			return CommandResult.success();
-		}
-		
 		if (argument.equals("destroy")) {
 			WorldFunctions.unloadThenDeleteLightonia(player);
 			return CommandResult.success();

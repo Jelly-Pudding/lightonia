@@ -8,7 +8,6 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
-import org.spongepowered.api.world.Chunk;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.WorldArchetype;
 import org.spongepowered.api.world.WorldArchetypes;
@@ -67,33 +66,6 @@ public class WorldFunctions {
 		}
 		player.sendMessage(Text.of(TextColors.DARK_RED, "Lightonia already exists and it is already loaded."));
 		return;
-	}
-	
-	public static void unloadLightoniaChunks(Player player) {
-		if (doesLightoniaExist()) {
-			Optional<World> theWorld = Sponge.getServer().getWorld("Lightonia");
-			if (theWorld.isPresent()) {
-				Collection<Player> lightoniaPlayers = theWorld.get().getPlayers();
-				if (lightoniaPlayers.isEmpty()) {
-					Iterable<Chunk> allChunks = theWorld.get().getLoadedChunks();
-					player.sendMessage(Text.of(TextColors.DARK_GREEN, "Unloading chunks..."));
-					for (Chunk chunk: allChunks) {
-						if (!chunk.unloadChunk()) {
-							player.sendMessage(Text.of(TextColors.DARK_RED, "Failed to unload a chunk at " + chunk.getPosition()));
-						} else {
-							player.sendMessage(Text.of(TextColors.DARK_GREEN, "Successfully unloaded a chunk at " + chunk.getPosition()));
-						}
-					}
-					player.sendMessage(Text.of(TextColors.DARK_GREEN, "Done."));
-				} else {
-					player.sendMessage(Text.of(TextColors.DARK_RED, "Someone is currently in Lightonia. Loaded chunks won't be unloaded."));
-				}
-			} else {
-				player.sendMessage(Text.of(TextColors.DARK_RED, "Lightonia is not even loaded. There won't be any chunks to unload."));
-			}
-		} else {
-			player.sendMessage(Text.of(TextColors.DARK_RED, "No chunks to unload since Lightonia does not exist."));
-		}
 	}
 	
 	public static void unloadThenDeleteLightonia(Player player) {
