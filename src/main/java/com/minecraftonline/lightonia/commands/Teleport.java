@@ -21,12 +21,11 @@ public class Teleport {
 		if (WorldFunctions.doesLightoniaExist()) {
 			if (WorldFunctions.isLightoniaLoaded()) {
 				player.sendMessage(Text.of(TextColors.DARK_GRAY, "Teleporting to Lightonia..."));
-				Sponge.getServer().loadWorld("Lightonia");
 				Vector3d playerPosition = player.getPosition();
 				positionBeforeTeleport.put(player.getName(), new Object[] {player.getWorld().getName(), playerPosition});
 				player.transferToWorld("Lightonia", playerPosition);
 			} else {
-				player.sendMessage(Text.of(TextColors.DARK_RED, "The world Lightonia is not loaded! Check out /Lightonia help."));
+				player.sendMessage(Text.of(TextColors.DARK_RED, "The world Lightonia is not loaded! If a region file is not being imported, try /Lightonia create."));
 			}
 		} else {
 			player.sendMessage(Text.of(TextColors.DARK_RED, "The world Lightonia does not exist! Try /Lightonia create and also check out /Lightonia help."));

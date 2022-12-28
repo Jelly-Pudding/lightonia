@@ -19,7 +19,7 @@ public class Help {
 				.concat(Text.of(TextColors.LIGHT_PURPLE, "\n/Lightonia import: ")
 				.concat(Text.of(TextColors.WHITE, "The backup region file corresponding to the one you are standing in gets imported into Lightonia.")
 				.concat(Text.of(TextColors.LIGHT_PURPLE, "\n/Lightonia create: ")
-				.concat(Text.of(TextColors.WHITE, "Creates the Lightonia world. Use /Lightonia import first.")
+				.concat(Text.of(TextColors.WHITE, "Creates and loads the Lightonia world.")
 				.concat(Text.of(TextColors.LIGHT_PURPLE, "\n/Lightonia tp: ")
 				.concat(Text.of(TextColors.WHITE, "Teleports you to Lightonia.")
 				.concat(Text.of(TextColors.LIGHT_PURPLE, "\n/Lightonia tpb: ")
