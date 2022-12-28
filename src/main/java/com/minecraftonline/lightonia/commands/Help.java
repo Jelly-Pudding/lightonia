@@ -16,7 +16,6 @@ public class Help {
 				.concat(Text.of(TextColors.WHITE, "Select which backup to use. Type can be either 'World' or 'Player'.\"")
 				.concat(Text.of(TextColors.LIGHT_PURPLE, "\n/Lightonia invsee <player>: ")
 				.concat(Text.of(TextColors.WHITE, "Opens up the player's inventory from the selected player backup. This includes their armour and their off-hand slot.")
-				.concat(Text.of(TextColors.DARK_RED, " Warning: this can cause lag.")
 				.concat(Text.of(TextColors.LIGHT_PURPLE, "\n/Lightonia import: ")
 				.concat(Text.of(TextColors.WHITE, "The backup region file corresponding to the one you are standing in gets imported into Lightonia.")
 				.concat(Text.of(TextColors.LIGHT_PURPLE, "\n/Lightonia create: ")
@@ -28,6 +27,6 @@ public class Help {
 				.concat(Text.of(TextColors.LIGHT_PURPLE, "\n/Lightonia unload: ")
 				.concat(Text.of(TextColors.WHITE, "Unloads all loaded chunks in Lightonia.")
 				.concat(Text.of(TextColors.LIGHT_PURPLE, "\n/Lightonia destroy: ")
-				.concat(Text.of(TextColors.WHITE, "The Lightonia world is unloaded and its files are deleted asynchronously from the disk.")))))))))))))))))))))));
+				.concat(Text.of(TextColors.WHITE, "The Lightonia world is unloaded and its files are deleted asynchronously from the disk."))))))))))))))))))))));
 	}
 }

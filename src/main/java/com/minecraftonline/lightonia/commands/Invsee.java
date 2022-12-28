@@ -22,16 +22,17 @@ public class Invsee {
 						String stringUUID = PlayerFunctions.getUUID(player, option1.get());
 						if (!stringUUID.isEmpty()) {
 							Lightonia.getLogger().warn(player.getName() + " is using /Lightonia invsee. The server may lag.");
-							player.sendMessage(Text.of(TextColors.GRAY, "Retrieving UUID.dat file..."));
+							player.sendMessage(Text.of(TextColors.GRAY, "Retrieving UUID.dat file...")
+									.concat(Text.of(TextColors.LIGHT_PURPLE, "\nThis can take 30 seconds. Please have patience.")));
 							PlayerFunctions.shiftDummyArray();
 							String dummyUUID = PlayerFunctions.dummyUUIDArray[0];
 							if (FileFunctions.tarFilePlayer || FileFunctions.tarCompressedFilePlayer) {
 								FileFunctions.transferFromTar(player, false, FileFunctions.selectedPlayerBackup, FileFunctions.tarDirectoryPlayer + "playerdata", 
-										                      stringUUID + ".dat", ConfigFile.playerBackupPath, "player", "/playerdata/" + dummyUUID + ".dat", option1, dummyUUID);
+										                      stringUUID + ".dat", ConfigFile.playerBackupPath, "player", "/playerdata/" + dummyUUID + ".dat", option1.get(), dummyUUID);
 							} else {
 								if (FileFunctions.transferFiles(player, false, FileFunctions.selectedPlayerBackup, 
 										                    "/playerdata/" + stringUUID + ".dat", "/playerdata/" + dummyUUID + ".dat", "playerdata")) {
-									invseeAfterAsync(player, option1, dummyUUID);
+									invseeAfterAsync(player, option1.get(), dummyUUID);
 								};
 							}
 						}
@@ -45,10 +46,10 @@ public class Invsee {
 				player.sendMessage(Text.of(TextColors.DARK_RED, "Remember to specify a player!"));
 			}
 		}
-	public static void invseeAfterAsync(Player player, Optional<String> option1, String dummyUUID) {
+	public static void invseeAfterAsync(Player player, String targetName, String dummyUUID) {
 		Optional<User> dummyUser = PlayerFunctions.getUser(dummyUUID);
 		if (dummyUser.isPresent()) {
-			PlayerFunctions.seeInventory(player, dummyUser.get(), option1.get().toString());
+			PlayerFunctions.seeInventory(player, dummyUser.get(), targetName);
 			FileFunctions.deleteFile(ConfigFile.worldPath + "/playerdata/" + dummyUUID + ".dat");
 		} else {
 				player.sendMessage(Text.of(TextColors.DARK_RED, "Failed to get dummy user matching the UUID " + dummyUUID));

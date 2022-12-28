@@ -1,7 +1,5 @@
 package com.minecraftonline.lightonia.commands;
 
-import java.util.Optional;
-
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
@@ -61,7 +59,8 @@ public class Import {
 		
 		player.sendMessage(Text.of(TextColors.GRAY, "Importing region file " )
 				.concat(Text.of(TextColors.DARK_GRAY, regionName)
-				.concat(Text.of(TextColors.GRAY, " into Lightonia..."))));
+				.concat(Text.of(TextColors.GRAY, " into Lightonia...")
+				.concat(Text.of(TextColors.LIGHT_PURPLE, "\nThis can take 30 seconds. Please have patience.")))));
 		
 		String dimension = playerWorld.getDimension().getType().toString();
 		String folder = "";
@@ -79,7 +78,7 @@ public class Import {
 		}
 		if (FileFunctions.tarFileWorld || FileFunctions.tarCompressedFileWorld) {
 			FileFunctions.transferFromTar(player, true, FileFunctions.selectedWorldBackup, FileFunctions.tarDirectoryWorld + folder + "region", regionName, 
-					                      ConfigFile.worldBackupPath, "world", "/Lightonia/region/" + regionName, Optional.of(""), "");
+					                      ConfigFile.worldBackupPath, "world", "/Lightonia/region/" + regionName, "", "");
 		} else {
 			FileFunctions.transferFiles(player, true, FileFunctions.selectedWorldBackup, "/" + folder + "region/" + regionName, "/Lightonia/region/" + regionName, "region");
 		}

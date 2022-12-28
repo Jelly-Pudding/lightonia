@@ -11,7 +11,6 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
@@ -212,7 +211,7 @@ public class FileFunctions {
 		}
 	}
 	
-	public static void transferFromTar(Player player, boolean world, String selectedDirectory, String desiredDirectory, String desiredFile, String backupPath, String type, String destination, Optional<String> targetName, String dummyUUID) {
+	public static void transferFromTar(Player player, boolean world, String selectedDirectory, String desiredDirectory, String desiredFile, String backupPath, String type, String destination, String targetName, String dummyUUID) {
 		Task.builder().execute(() -> {
 			boolean done = false;
 			TarArchiveInputStream tarInput = null;
