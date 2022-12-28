@@ -22,7 +22,7 @@ public class Invsee {
 						String stringUUID = PlayerFunctions.getUUID(player, option1.get());
 						if (!stringUUID.isEmpty()) {
 							Lightonia.getLogger().warn(player.getName() + " is using /Lightonia invsee. The server may lag.");
-							player.sendMessage(Text.of(TextColors.DARK_RED, "Retrieving UUID.dat file..."));
+							player.sendMessage(Text.of(TextColors.GRAY, "Retrieving UUID.dat file..."));
 							PlayerFunctions.shiftDummyArray();
 							String dummyUUID = PlayerFunctions.dummyUUIDArray[0];
 							if (FileFunctions.tarFilePlayer || FileFunctions.tarCompressedFilePlayer) {
