@@ -28,7 +28,7 @@ public class CommandHub implements CommandExecutor {
 		Optional<String> option2 = args.getOne("option2");
 		
 		if (argument.equals("select")) {
-			Select.seletBackup(player, option1, option2);
+			Select.selectBackup(player, option1, option2);
 			return CommandResult.success();
 		}
 		

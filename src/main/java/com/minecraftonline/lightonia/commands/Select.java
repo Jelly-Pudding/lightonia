@@ -10,7 +10,7 @@ import com.minecraftonline.lightonia.util.FileFunctions;
 
 public class Select {
 
-	static void seletBackup(Player player, Optional<String> option1, Optional<String> option2) {
+	static void selectBackup(Player player, Optional<String> option1, Optional<String> option2) {
 		if (option1.isPresent()) {
 			if (option1.get().toLowerCase().equals("world")) {
 				if (option2.isPresent()) {
